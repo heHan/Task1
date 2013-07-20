@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 public class HomePage extends AbstractBasePage{
 	static final By MENU_BASHBOARD = By.id("headerLinkOverview");
@@ -27,7 +26,6 @@ public class HomePage extends AbstractBasePage{
 	}
 	
 	public void clickMyApplications(){
-		WebElement myApplication = findWebElement(MENU_MY_APPLICATION);
-		myApplication.click();
+		findWebElementAndClick(MENU_MY_APPLICATION);
 	}
 }

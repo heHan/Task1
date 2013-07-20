@@ -1,7 +1,12 @@
 package com.ping.pingone.webdriver.test;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,8 +45,9 @@ public abstract class AbstractWebDriverBase {
 	protected WebDriver webDriver = null;
 	protected TestProperties testProperties = new TestProperties(PROPERTIES_FILE_NAME);
 	
-	private static final String REPORT_PATH = "target/surefire-reports/html/";
-	private static final String SCREENSHOT = "screenshots/";
+	public static final String REPORT_PATH = "target/surefire-reports/html/";
+	public static final String HTML_SOURCE_FILE = "htmlPageSource/";
+	public static final String SCREENSHOT = "screenshots/";
 
 	private static final Logger log = Logger.getLogger(AbstractWebDriverBase.class);
 
@@ -79,14 +85,15 @@ public abstract class AbstractWebDriverBase {
 	@AfterMethod(alwaysRun = true)
 	public final void shutdownWebDriver(ITestResult testResult){
 		if (webDriver != null){
-			// take screen
+			// take screenshot on failure
 			if (testResult.getStatus() == ITestResult.FAILURE) {
 				String screenshotFile = takeScreenshot();
 				String link2Screenshot = "<a href=\"" + SCREENSHOT + screenshotFile + "\" target=\"_blank\"> SCRENNSHOT</a><br />";
 				Reporter.setCurrentTestResult(testResult);
 				Reporter.log(link2Screenshot);
+				downloadHtmlSource();
 			}
-			webDriver.quit();
+			//webDriver.quit();
 		}
 	}
 	
@@ -115,10 +122,56 @@ public abstract class AbstractWebDriverBase {
 	}
 	
 	/**
+	 * Save the current page source in html file for debugging
+	 * @param webDriver the webDriver of current session
+	 * @return get the file name
+	 */
+	public String downloadHtmlSource() {
+		String fileName = webDriver.getWindowHandle() +"-"+ getCurrentTime() + ".txt";
+		String htmlSourceFileName = REPORT_PATH + HTML_SOURCE_FILE + fileName;
+		writeUtf8ToFile(htmlSourceFileName, webDriver.getPageSource());
+		return fileName;
+	}
+	
+	/**
+	 * Write data into this parse file
+	 *  
+	 * @param append append to the file or overwrite
+	 * @param data the string to write to parse file
+	 */
+	public static void writeUtf8ToFile(String outputFile, String data) {
+		try 
+		{
+			String pathStrings[] = outputFile.split("/");
+			String filePath = "";
+			for (String pathString : pathStrings){
+				if (!pathString.contains(".") ){
+					filePath = filePath + pathString + "/";
+				}
+			}
+			File dir = new File (filePath);
+			if (!dir.exists())
+			{
+				log.debug(filePath);
+				dir.mkdirs();
+			}
+			File targetFile = new File(outputFile);
+			OutputStream out = new FileOutputStream(targetFile, true);
+			Writer writer = new OutputStreamWriter(out, Charset.forName("UTF-8"));
+			log.debug("Writing data : " + data);
+			writer.write(data);
+			writer.close();
+		} catch (IOException exception) 
+		{
+			log.error(exception, exception);
+			System.exit(0);
+		}
+	}
+	/**
 	 * Return the current time in String format
 	 * @return current time in yyyy-MM-dd-HH-mm-ss format
 	 */
-	public String getCurrentTime() {
+	public static String getCurrentTime() {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 		String currentTime = String.valueOf(dateFormat.format(new Date()));
 		return currentTime;

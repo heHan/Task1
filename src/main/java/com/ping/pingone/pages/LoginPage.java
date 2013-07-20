@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 public class LoginPage extends AbstractBasePage {
 	
@@ -27,18 +26,15 @@ public class LoginPage extends AbstractBasePage {
 	}
 	
 	public void enterEmail(String email) {
-		WebElement emailInput = findWebElement(EMAIL_INPUT);
-		emailInput.sendKeys(email);
+		findWebElementAndType(EMAIL_INPUT, email);
 	}
 	
 	public void enterPassword(String password) {
-		WebElement passwordInput = findWebElement(PASSWORD_INPUT);
-		passwordInput.sendKeys(password);
+		findWebElementAndType(PASSWORD_INPUT, password);
 	}
 	
 	public void clickLogIn() {
-		WebElement loginButton = findWebElement(LOGIN_BUTTON);
-		loginButton.click();
+		findWebElementAndClick(LOGIN_BUTTON);		
 	}
 
 }

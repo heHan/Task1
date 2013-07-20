@@ -7,10 +7,13 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
@@ -233,57 +236,41 @@ public abstract class AbstractBasePage {
 	}
 	
 	/**
-	 * This checks to make sure the element is on the page. Useful if the only verification needed is if the element exists.
-	 * @param webElementSelector
-	 * @return if the element is found or not
+	 * Wrap the webdriver findElement and click functions and fail the test on exception thrown
+	 * @param webElementSelector webElementSelector 
+	 * @return WebElement reference to the web object
 	 */
-	protected Boolean checkWebElementExists(By webElementSelector) {
-		Boolean exists;
-		try {
-			webDriver.findElement(webElementSelector);
-			exists = Boolean.TRUE;
-		} catch (NoSuchElementException noSuchElement) {
-			exists = Boolean.FALSE;
-		} catch(ElementNotVisibleException notVisible) {
-			exists = Boolean.FALSE;
+	protected void findWebElementAndClick (By webElementSelector){
+		WebElement button =  findWebElement(webElementSelector);
+		try {		
+			button.click();
 		}
-		return exists;
+		catch (StaleElementReferenceException e) {
+			throw new AssertionError("Found the web element, but cannot perform click action. " + webElementSelector.toString());
+		}		
 	}
 	
 	/**
-	 * @param webElementSelector should match multiple elements
-	 * @return list of all {@link WebElement} that match the specified {@link webElementSelector}
+	 * Wrap the webdriver findElement and type function
+	 * @param webElementSelector webElementSelector 
+	 * @param text the text to enter into the field
 	 */
-	protected List<WebElement> findWebElements (By webElementSelector) {
-		try {
-			return webDriver.findElements(webElementSelector);
-		} catch (NoSuchElementException noSuchElement) {
-			throw new AssertionError(webElementSelector);
-		}
+	protected void findWebElementAndType (By webElementSelector, String text){
+		WebElement inputBox = findWebElement(webElementSelector);
+		inputBox.sendKeys(text);		
 	}
 	
 	/**
-	 * This function is for finding elements that are optional for the test case. Meaning if the elements are not found
-	 * the test case can still continue executing. If you wanted the test case to stop executing when it is unable to find
-	 * the elements please use the findWebElements function
-	 * @param webElementSelector should match multiple elements
-	 * @return list of all {@link WebElement} that match the specified {@link webElementSelector}
-	 * @throws NoSuchElementException will be thrown if elements are not found
-	 * @throws ElementNotVisibleException will be thrown if elements are found but if any of the elements
-	 * are not displayed so they cannot be interacted with
+	 * Wrap the webdriver select function and fail the test on exception thrown
+	 * @param webElementSelector webElementSelector 
+	 * @param value the value to select from dropDown list
 	 */
-	protected List<WebElement> findOptionalWebElements (By webElementSelector) throws NoSuchElementException, ElementNotVisibleException{
+	protected void findWebElementAndSelect(By webElementSelector, String value){
 		try {
-			List<WebElement> webElements = webDriver.findElements(webElementSelector);
-			for(WebElement webElement: webElements) {
-				if(!webElement.isDisplayed()) {
-					throw new ElementNotVisibleException(webElementSelector.toString());
-				}
-			}
-			return webElements;
-		} catch (NoSuchElementException noSuchElement) {
-			throw new AssertionError(webElementSelector.toString());
-		}
+			Select dropdown = new Select(findWebElement(webElementSelector));
+			dropdown.selectByVisibleText(value);
+		} catch (UnexpectedTagNameException e) {
+			throw new AssertionError("Cannot create select item basing on webElement " + webElementSelector.toString());
+		}		
 	}
-
 }
