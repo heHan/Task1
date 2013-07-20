@@ -1,6 +1,5 @@
 package com.ping.pingone.pages;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -24,7 +23,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  *
  */
 
-public abstract class AbstractBasePage {
+public abstract class AbstractBasePage{
 
 	/**
 	 * Number of seconds to wait until a timeout is thrown.
@@ -35,7 +34,6 @@ public abstract class AbstractBasePage {
 	protected WebDriver webDriver;
 	protected WebDriverWait wait;
 	protected String windowHandle;
-	protected boolean isLoaded;
 	private static final String NO_SUCH_ELEMENT = "Can not find such element on the page";
 	private static final String NULL_WEB_ELEMENT = "Web element object is null";
 	private static final String NOT_VISIBLE = "Found the element on the page, not it's not visible";
@@ -53,29 +51,20 @@ public abstract class AbstractBasePage {
 		this.webDriver = webDriver;
 		this.wait = new WebDriverWait(webDriver, TIMEOUT);
 		this.windowHandle = webDriver.getWindowHandle();
-		this.isLoaded = waitForPageToLoad();
+		waitForPageToLoad();
 	}
-
+	
 	/**
-	 * @return the webDriver
+	 * @return Locators to verify that the browser has loaded the correct page.
 	 */
-	public WebDriver getWebDriver() {
-		return webDriver;
-	}
-
-	/**
-	 * @param webDriver the webDriver to set
-	 */
-	public void setWebDriver(WebDriver webDriver) {
-		this.webDriver = webDriver;
-	}
+	protected abstract List<By> verificationPoints();
 
 	/**
 	 * Waits until the "verification points" are found. If any are not found, it
 	 * fails the test if the wait time runs out.
 	 * @return True/false depends on page loading
 	 */
-	public boolean waitForPageToLoad() {
+	public void waitForPageToLoad() {
 		try {
 			wait.until(new ExpectedCondition<Boolean>() {
 				public Boolean apply(WebDriver wd) {
@@ -86,7 +75,6 @@ public abstract class AbstractBasePage {
 		catch (TimeoutException timeOutException) {
 			throw new AssertionError(this.getClass().getSimpleName() + " is not verified. Missing " + returnMissingElements(verificationPoints()));
 		}
-		return true;
 	}
 
 	private String returnMissingElements(List<By> vps) {
@@ -113,52 +101,6 @@ public abstract class AbstractBasePage {
 		}
 		return notFoundVp;	
 	}
-
-	/**
-	 * Wait for a element to load on a page
-	 * @param element
-	 * @return true is page is found, test fail otherwise
-	 */
-	public boolean waitForElement(By element) {
-		List<By> elements = new ArrayList<By>();
-		elements.add(element);
-		return waitForElements(elements);
-	}
-
-	/**
-	 * Waits until the "verification points" are found. If any are not found, it
-	 * fails the test if the wait time runs out.
-	 * @return True/false depends on page loading
-	 */
-	public boolean waitForElements(final List<By> elements) {
-		return waitForElements(elements, null);
-	}
-	/**
-	 * Waits until the "verification points" are found. If any are not found, it
-	 * fails the test if the wait time runs out.
-	 * 
-	 * @param elements elements to find on the web page
-	 * @param failMessage failed message if elements cannot be found within TIMEOUT
-	 * @return true, otherwise throw AssertionError
-	 */
-	public boolean waitForElements(final List<By> elements, String failMessage) {
-		try {
-			wait.until(new ExpectedCondition<Boolean>() {
-				public Boolean apply(WebDriver wd) {
-					return isPageLoaded(elements);
-				}
-			});
-		} 
-		catch (TimeoutException timeOutException) {
-			if (failMessage != null) { 
-				throw new AssertionError("Missing" + returnMissingElements(elements) + "; " +failMessage);
-			}
-			else {
-				throw new AssertionError("Missing" + returnMissingElements(elements));
-			}
-		}
-		return true;
-	}
 	
 	/**
 	 * Simple helper to determine if the browser has loaded the correct page.
@@ -166,7 +108,7 @@ public abstract class AbstractBasePage {
 	private boolean isPageLoaded(List<By> vps) {
 		try {
 			for (By point : vps) {
-				if(!findOptionalWebElement(point).isDisplayed()) {
+				if(!webDriver.findElement(point).isDisplayed()) {
 					return false;
 				}
 			}
@@ -185,25 +127,6 @@ public abstract class AbstractBasePage {
 	}
 
 	/**
-	 * @return Locators to verify that the browser has loaded the correct page.
-	 */
-	protected abstract List<By> verificationPoints();
-
-	/**
-	 * @return the isLoaded
-	 */
-	public boolean isLoaded() {
-		return isLoaded;
-	}
-
-	/**
-	 * @param isLoaded the isLoaded to set
-	 */
-	public void setLoaded(boolean isLoaded) {
-		this.isLoaded = isLoaded;
-	}
-
-	/**
 	 * Wrap the webdriver findElement function to throw proper message
 	 * @param webElementSelector webElementSelector 
 	 * @return WebElement reference to the web object
@@ -211,28 +134,9 @@ public abstract class AbstractBasePage {
 	protected WebElement findWebElement (By webElementSelector){
 		try {
 			return webDriver.findElement(webElementSelector);	
-		}
-		catch (NoSuchElementException noSuchElement) {
+		} catch (NoSuchElementException noSuchElement) {
 			throw new AssertionError("Cannot find the web element with selector " + webElementSelector.toString());
 		}		
-	}
-	
-	/**
-	 * This function is for finding an element that is optional for the test case. Meaning if the element is not found
-	 * the test case can still continue executing. If you wanted the test case to stop executing when it is unable to find
-	 * the element please use the findWebElement function
-	 * @param webElementSelector
-	 * @return the {@link WebElement} if one is found
-	 * @throws NoSuchElementException will be thrown if element is not found
-	 * @throws ElementNotVisibleException will be thrown if element is found but not displayed so it cannot be interacted with
-	 */
-	protected WebElement findOptionalWebElement (By webElementSelector) throws NoSuchElementException, ElementNotVisibleException{
-		WebElement webElement = webDriver.findElement(webElementSelector);
-		if (!webElement.isDisplayed()) {
-			//show the web elements
-			throw new ElementNotVisibleException(webElementSelector.toString());
-		}
-		return webElement;	
 	}
 	
 	/**
@@ -244,20 +148,23 @@ public abstract class AbstractBasePage {
 		WebElement button =  findWebElement(webElementSelector);
 		try {		
 			button.click();
-		}
-		catch (StaleElementReferenceException e) {
+		} catch (StaleElementReferenceException e) {
 			throw new AssertionError("Found the web element, but cannot perform click action. " + webElementSelector.toString());
 		}		
 	}
 	
 	/**
-	 * Wrap the webdriver findElement and type function
+	 * Wrap the webdriver findElement and type function and fail the test on exception thrown
 	 * @param webElementSelector webElementSelector 
 	 * @param text the text to enter into the field
 	 */
 	protected void findWebElementAndType (By webElementSelector, String text){
 		WebElement inputBox = findWebElement(webElementSelector);
-		inputBox.sendKeys(text);		
+		try {
+			inputBox.sendKeys(text);
+		} catch (ElementNotVisibleException e){
+			throw new AssertionError("Found the web element, but it's not visible to send keys. " + webElementSelector.toString());
+		}
 	}
 	
 	/**
