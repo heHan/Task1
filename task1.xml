@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="TASK 1" verbose="1">
+	<tests>
+		<parameter name="browser" value="firefox" />
+		<test verbose="1" name="Add an application">
+			<classes>
+				<class name="com.ping.pingone.tests.TestAddApplication" />
+			</classes>
+		</test>
+	</tests>
+</suite>
