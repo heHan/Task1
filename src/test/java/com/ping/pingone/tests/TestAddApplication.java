@@ -9,15 +9,14 @@ import com.ping.pingone.pages.NewApplicationWizardFive;
 import com.ping.pingone.pages.NewApplicationWizardOne;
 import com.ping.pingone.pages.NewApplicationWizardThree;
 import com.ping.pingone.pages.NewApplicationWizardTwo;
+import com.ping.pingone.test.properties.TestPropertiesInterface;
 import com.ping.pingone.webdriver.test.AbstractWebDriverBase;
-
+/**
+ * Test create new application workflow
+ * @author HenryH
+ *
+ */
 public class TestAddApplication extends AbstractWebDriverBase{
-	static final String PINGONE_URL_PROPERTIES_KEY = "test.environment.baseUrl";
-	static final String PINGONE_LOGIN_USER_EMAIL_KEY = "test.environment.login.email";
-	static final String PINGONE_LOGIN_USER_PASSWORD_KEY = "test.environment.login.password";
-
-	static final String CANNOT_LOAD_PROPERTY = "Cannot load property: ";
-	
 	static final String NEW_APPLICATION_CATEGORY = "Other";
 	static final String NEW_APPLICATION_NAME = "HenryTest" + getCurrentTime();
 	static final String NEW_APPLICATION_DESCRIPTION = "A short description";
@@ -27,17 +26,17 @@ public class TestAddApplication extends AbstractWebDriverBase{
 	@Test (description = "login pingon; click add new application; create connection; " +
 			"complete the form; verify the new application is added;")
 	public void testAddNewApplication() {
-		String pingOneUrl = testProperties.getProperties().getProperty(PINGONE_URL_PROPERTIES_KEY);
-		String loginEmail = testProperties.getProperties().getProperty(PINGONE_LOGIN_USER_EMAIL_KEY);
-		String loginPassword = testProperties.getProperties().getProperty(PINGONE_LOGIN_USER_PASSWORD_KEY);
+		String pingOneUrl = testProperties.getProperties().getProperty(TestPropertiesInterface.PINGONE_URL_PROPERTIES_KEY);
+		String loginEmail = testProperties.getProperties().getProperty(TestPropertiesInterface.PINGONE_LOGIN_USER_EMAIL_KEY);
+		String loginPassword = testProperties.getProperties().getProperty(TestPropertiesInterface.PINGONE_LOGIN_USER_PASSWORD_KEY);
 		if (pingOneUrl == null) {
-			throw new AssertionError(CANNOT_LOAD_PROPERTY + PINGONE_URL_PROPERTIES_KEY);
+			throw new AssertionError(TestPropertiesInterface.CANNOT_LOAD_PROPERTY + TestPropertiesInterface.PINGONE_URL_PROPERTIES_KEY);
 		}
 		if (loginEmail == null) {
-			throw new AssertionError(CANNOT_LOAD_PROPERTY + PINGONE_LOGIN_USER_EMAIL_KEY);
+			throw new AssertionError(TestPropertiesInterface.CANNOT_LOAD_PROPERTY + TestPropertiesInterface.PINGONE_LOGIN_USER_EMAIL_KEY);
 		}
 		if (loginPassword == null) {
-			throw new AssertionError(CANNOT_LOAD_PROPERTY + PINGONE_LOGIN_USER_PASSWORD_KEY);
+			throw new AssertionError(TestPropertiesInterface.CANNOT_LOAD_PROPERTY + TestPropertiesInterface.PINGONE_LOGIN_USER_PASSWORD_KEY);
 		}
 		reporterLog("Steps");
 		reporterLog("1. Load pingone login page");
@@ -89,6 +88,5 @@ public class TestAddApplication extends AbstractWebDriverBase{
 		reporterLog("Delete application, " + NEW_APPLICATION_NAME);
 		myApplicationsPage.clickFirstDeleteButton();
 		myApplicationsPage.verifyDeleted();
-		throw new AssertionError("fail for now");
 	}
 }

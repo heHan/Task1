@@ -19,6 +19,7 @@ public class MyApplicationsPage extends AbstractBasePage {
 	static final By THE_FIREST_DELETE_BUTTON = By.xpath("//a[@class='btn std-btn last']");
 	static final By FEEDBACK_PANEL = By.xpath("//span[@class='feedbackPanelINFO']");
 	static final By DELETE_CONFIRM_BUTTON = By.id("confirmationDialogAction");
+	static final By START_SSO = By.xpath("//a[text()= 'Start Single Sign-On']");
 	public MyApplicationsPage(WebDriver webDriver) {
 		super(webDriver);
 	}
@@ -65,5 +66,14 @@ public class MyApplicationsPage extends AbstractBasePage {
 		catch (TimeoutException timeOutException) {
 			throw new AssertionError("Deleting the application took too long.");
 		}
+	}
+	
+	public void clickTestConnectionButtonByApplicationName(String applicationName) {
+		String xpathString = "//span[text()='" + applicationName + "']/../../..//a[@class='btn sol-btn std-btn']";
+		By testConnection = By.xpath(xpathString);
+		findWebElementAndClick(testConnection);
+	}
+	public void clickStartSSO(){
+		findWebElementAndClick(START_SSO);
 	}
 }
