@@ -63,24 +63,21 @@ public class TestAddApplication extends AbstractWebDriverBase{
 		reporterLog("8. Select private visibility");
 		wizardOne.selectPrivateVisibility();		
 		reporterLog("9. Click Continue to Step 2");
-		wizardOne.clickContinueButton();
+		NewApplicationWizardTwo wizardTwo = wizardOne.clickContinueButton();
 		
 		reporterLog("10. Choose enable SAML through PingOne ");
-		NewApplicationWizardTwo wizardTwo = new NewApplicationWizardTwo(webDriver);
 		wizardTwo.chooseSAMLEnabled();
 		reporterLog("10. Enter domain name: " + DOMAIN_NAME);
 		wizardTwo.enterDomainName(DOMAIN_NAME);
 		reporterLog("11. Enter application url: " + APPLICATION_URL);
 		wizardTwo.enterApplicationUrl(APPLICATION_URL);
 		reporterLog("12. Click Continue to Step 3");
-		wizardTwo.clickContinueButton();
+		NewApplicationWizardThree wizardThree = wizardTwo.clickContinueButton();
 		
 		reporterLog("13. Click Continue to Step 5");
-		NewApplicationWizardThree wizardThree = new NewApplicationWizardThree(webDriver);		
-		wizardThree.clickContinueButton();
+		NewApplicationWizardFive wizardFive = wizardThree.clickContinueButton();
 		
 		reporterLog("14. Save application");
-		NewApplicationWizardFive wizardFive = new NewApplicationWizardFive(webDriver);	
 		wizardFive.clickSaveButton();
 		
 		reporterLog("Verify new application, " + NEW_APPLICATION_NAME + ", is created");

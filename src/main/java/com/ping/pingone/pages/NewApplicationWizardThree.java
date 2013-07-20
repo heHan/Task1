@@ -25,7 +25,12 @@ public class NewApplicationWizardThree extends MyApplicationsPage {
 		return verificationPoints;
 	}
 	
-	public void clickContinueButton() {
+	/**
+	 * click the continue button and return the next page object
+	 * @return wizard # 5
+	 */
+	public NewApplicationWizardFive clickContinueButton() {
 		findWebElementAndClick(CONTINUE_NEXT_BUTTON);
+		return new NewApplicationWizardFive(webDriver);
 	}
 }

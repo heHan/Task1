@@ -87,7 +87,7 @@ public abstract class AbstractWebDriverBase {
 				Reporter.setCurrentTestResult(testResult);
 				Reporter.log(link2Screenshot);
 			}
-			//webDriver.quit();
+			webDriver.quit();
 		}
 	}
 	

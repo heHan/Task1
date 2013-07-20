@@ -52,7 +52,12 @@ public class NewApplicationWizardTwo extends MyApplicationsPage {
 		findWebElementAndType(APPLICATION_URL, url);
 	}
 	
-	public void clickContinueButton() {
+	/**
+	 * Click the continue button and return the next page object
+	 * @return wizard # 3
+	 */
+	public NewApplicationWizardThree clickContinueButton() {
 		findWebElementAndClick(CONTINUE_NEXT_BUTTON);
+		return new NewApplicationWizardThree(webDriver);
 	}
 }

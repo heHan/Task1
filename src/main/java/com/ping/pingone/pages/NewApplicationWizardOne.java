@@ -53,8 +53,13 @@ public class NewApplicationWizardOne extends MyApplicationsPage {
 		findWebElementAndType(APPLICATION_DESCRIPTION, description);
 	}
 	
-	public void clickContinueButton() {
+	/**
+	 * click the continue button and return the next page object
+	 * @return next wizard object #2
+	 */
+	public NewApplicationWizardTwo clickContinueButton() {
 		findWebElementAndClick(CONTINUE_NEXT_BUTTON);
+		return new NewApplicationWizardTwo(webDriver);
 	}
 	
 	public void selectPrivateVisibility(){

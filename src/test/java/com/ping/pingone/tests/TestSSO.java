@@ -1,12 +1,10 @@
 package com.ping.pingone.tests;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import org.testng.Reporter;
 import org.testng.annotations.Test;
 
 import com.ping.pingone.pages.HomePage;
+import com.ping.pingone.pages.IdpApplicationLogin;
 import com.ping.pingone.pages.LoginPage;
 import com.ping.pingone.pages.MyApplicationsPage;
 import com.ping.pingone.test.properties.TestPropertiesInterface;
@@ -47,26 +45,11 @@ public class TestSSO extends AbstractWebDriverBase{
 		homePage.clickMyApplications();
 		MyApplicationsPage myApplicationsPage = new MyApplicationsPage(webDriver);
 		myApplicationsPage.clickTestConnectionButtonByApplicationName(TEST_APPLICATION_NAME);
-		myApplicationsPage.clickStartSSO();
+		
+		String currentWindow = webDriver.getWindowHandle();
+		IdpApplicationLogin idpApplicationLogin = myApplicationsPage.clickStartSSOAndWaitForRedirect(currentWindow);
+		idpApplicationLogin.clickLoginButton();
 		Reporter.log(webDriver.getCurrentUrl(), true);
-		Set<String> openWindows = webDriver.getWindowHandles();
-		Iterator<String> windowsIterator = openWindows.iterator();
-		while(windowsIterator.hasNext())
-		{
-			String popupHandle=windowsIterator.next().toString();
-			if(!popupHandle.contains("Ping Identity Quick-Start IdP Application - Login"))
-			{
-				webDriver.switchTo().window(popupHandle);
-				//After finished your operation in pop-up just select the main window again
-				Reporter.log(webDriver.getCurrentUrl(), true);
-			}
-		}
-		try {
-			Thread.sleep(20000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		//https://myapp.example.com/sso.php?tokenid=ID50b3a0284d5f0a392033249b04ace42b333ff4e6afc4fcdb01&agentid=3b1ba308
 	}
 }

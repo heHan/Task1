@@ -1,12 +1,15 @@
 package com.ping.pingone.pages;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.testng.Reporter;
 
 /**
  * My Application page 
@@ -73,7 +76,20 @@ public class MyApplicationsPage extends AbstractBasePage {
 		By testConnection = By.xpath(xpathString);
 		findWebElementAndClick(testConnection);
 	}
-	public void clickStartSSO(){
+	public IdpApplicationLogin clickStartSSOAndWaitForRedirect(String currentWindow){
 		findWebElementAndClick(START_SSO);
+		Reporter.log(webDriver.getCurrentUrl(), true);
+		Set<String> openWindows = webDriver.getWindowHandles();
+		Iterator<String> windowsIterator = openWindows.iterator();
+		while(windowsIterator.hasNext())
+		{
+			String popupHandle=windowsIterator.next().toString();
+			if(!popupHandle.contains(currentWindow))
+			{
+				webDriver.switchTo().window(popupHandle);
+				return new IdpApplicationLogin(webDriver);
+			}
+		}
+		throw new AssertionError("Cannot load idp application login page");
 	}
 }
