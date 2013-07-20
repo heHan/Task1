@@ -54,7 +54,7 @@ public class NewApplicationWizardTwo extends MyApplicationsPage {
 	
 	/**
 	 * Click the continue button and return the next page object
-	 * @return wizard # 3
+	 * @return {@link NewApplicationWizardThree}
 	 */
 	public NewApplicationWizardThree clickContinueButton() {
 		findWebElementAndClick(CONTINUE_NEXT_BUTTON);

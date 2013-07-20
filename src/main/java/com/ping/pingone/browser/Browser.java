@@ -7,14 +7,19 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
- * Broswer enum class
+ * Browser enum class, browser has a name and a capability
  * 
  * @author hehan
  */
 public enum Browser {
-	// Name the browser with [NAME][MajorVERSION]
+	/*
+	 *  create browsers with [NAME][VERSION][PLATFORM]
+	 *  the version and platform can be used to select browser from a grid environment
+	 */
 	FIREFOX ("firefox", setCapability(DesiredCapabilities.firefox(), "", "")),
-	//CHROME ("chrome", setCapability(DesiredCapabilities.chrome(), "", "")), need to setup the chrome driver
+	/*
+	 * CHROME ("chrome", setCapability(DesiredCapabilities.chrome(), "", "")), need to setup the chrome driver
+	 */
 	IE ("ie", setCapability(DesiredCapabilities.internetExplorer(), "", "")),
 	SAFARI ("safar", setCapability(DesiredCapabilities.safari(), "", ""));
 	
@@ -42,7 +47,6 @@ public enum Browser {
 	private static DesiredCapabilities setCapability(DesiredCapabilities capability, String version, String platform) {
 		capability.setVersion(version);
 		if (platform != "") {
-			// get the Platform enum from the string value
 			capability.setPlatform(Platform.valueOf(platform));
 		}
 		return capability;
@@ -97,18 +101,5 @@ public enum Browser {
 		for (Browser browser : values()) {
 			browserNameToBrowserMapping.put(browser.browserName, browser);
 		}
-	}
-	/**
-	 * to String function 
-	 * eg. Browser{browserName=firefox19, capability='Capabilities [{platform=ANY, browserName=firefox, version=19}]'}
-	 */
-	@Override
-	public String toString() {
-		final StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("Browser");
-		stringBuilder.append("{browserName=").append(browserName);
-		stringBuilder.append(", capability='").append(capability).append('\'');
-		stringBuilder.append('}');
-		return stringBuilder.toString();
 	}
 }

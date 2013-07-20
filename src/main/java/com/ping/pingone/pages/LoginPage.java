@@ -33,8 +33,13 @@ public class LoginPage extends AbstractBasePage {
 		findWebElementAndType(PASSWORD_INPUT, password);
 	}
 	
-	public void clickLogIn() {
+	/**
+	 * 
+	 * @return {@link HomePage}
+	 */
+	public HomePage clickLogIn() {
 		findWebElementAndClick(LOGIN_BUTTON);		
+		return  new HomePage(webDriver);
 	}
 
 }

@@ -25,7 +25,12 @@ public class HomePage extends AbstractBasePage{
 		return verificationPoints;
 	}
 	
-	public void clickMyApplications(){
+	/**
+	 * Click the my application menu and return the my application page object
+	 * @return {@link MyApplicationsPage}
+	 */
+	public MyApplicationsPage clickMyApplications(){
 		findWebElementAndClick(MENU_MY_APPLICATION);
+		return new MyApplicationsPage(webDriver);
 	}
 }

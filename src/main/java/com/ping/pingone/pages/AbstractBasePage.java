@@ -28,7 +28,7 @@ public abstract class AbstractBasePage{
 	/**
 	 * Number of seconds to wait until a timeout is thrown.
 	 */
-	public static final int TIMEOUT = 30;
+	public static final int TIMEOUT = 20;
 
 	private static final Logger log = Logger.getLogger(AbstractBasePage.class);
 	protected WebDriver webDriver;

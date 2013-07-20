@@ -9,7 +9,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.testng.Reporter;
 
 /**
  * My Application page 
@@ -33,9 +32,13 @@ public class MyApplicationsPage extends AbstractBasePage {
 		verificationPoints.add(ADD_NEW_APPLICATION_BUTTON);
 		return verificationPoints;
 	}
-
-	public void clickAddNewApplicationButton() {
+	/**
+	 * 
+	 * @return {@link NewApplicationWizardOne}
+	 */
+	public NewApplicationWizardOne clickAddNewApplicationButton() {
 		findWebElementAndClick(ADD_NEW_APPLICATION_BUTTON);
+		return new NewApplicationWizardOne(webDriver);
 	}
 
 	/**
@@ -47,6 +50,7 @@ public class MyApplicationsPage extends AbstractBasePage {
 		By newApplicationName = By.xpath("//span[text()='" +applicationName + "']");
 		findWebElement(newApplicationName);
 	}
+	
 	public void clickFirstDeleteButton() {
 		findWebElementAndClick(THE_FIREST_DELETE_BUTTON);
 		findWebElementAndClick(DELETE_CONFIRM_BUTTON);
@@ -76,9 +80,14 @@ public class MyApplicationsPage extends AbstractBasePage {
 		By testConnection = By.xpath(xpathString);
 		findWebElementAndClick(testConnection);
 	}
+	
+	/**
+	 * Click the start sso link and switch window handler into the new window
+	 * @param currentWindow existing window handler
+	 * @return {@link IdpApplicationLogin}
+	 */
 	public IdpApplicationLogin clickStartSSOAndWaitForRedirect(String currentWindow){
 		findWebElementAndClick(START_SSO);
-		Reporter.log(webDriver.getCurrentUrl(), true);
 		Set<String> openWindows = webDriver.getWindowHandles();
 		Iterator<String> windowsIterator = openWindows.iterator();
 		while(windowsIterator.hasNext())

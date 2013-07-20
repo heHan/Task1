@@ -39,22 +39,18 @@ public class TestAddApplication extends AbstractWebDriverBase{
 			throw new AssertionError(TestPropertiesInterface.CANNOT_LOAD_PROPERTY + TestPropertiesInterface.PINGONE_LOGIN_USER_PASSWORD_KEY);
 		}
 		reporterLog("Steps");
-		reporterLog("1. Load pingone login page");
+		reporterLog("1. Load pingone login page: " + pingOneUrl);
 		webDriver.get(pingOneUrl);
 		reporterLog("2. Login in with account: " + loginEmail + "/" + loginPassword);
 		LoginPage loginPage = new LoginPage(webDriver);
 		loginPage.enterEmail(loginEmail);
 		loginPage.enterPassword(loginPassword);
-		loginPage.clickLogIn();
-		reporterLog("3. Click my application tab on home page");
-		HomePage homePage = new HomePage(webDriver);
-		homePage.clickMyApplications();
+		HomePage homePage = loginPage.clickLogIn();
+		reporterLog("3. Click my application tab on home page");		
+		MyApplicationsPage myApplicationsPage = homePage.clickMyApplications();		
 		reporterLog("4. Click add new application button");
-		MyApplicationsPage myApplicationsPage = new MyApplicationsPage(webDriver);
-		myApplicationsPage.clickAddNewApplicationButton();
-		
+		NewApplicationWizardOne wizardOne = myApplicationsPage.clickAddNewApplicationButton();		
 		reporterLog("5. Select category: " + NEW_APPLICATION_CATEGORY);		
-		NewApplicationWizardOne wizardOne = new NewApplicationWizardOne(webDriver);
 		wizardOne.selectCategory(NEW_APPLICATION_CATEGORY);
 		reporterLog("6. Enter the application name" + NEW_APPLICATION_NAME);
 		wizardOne.enterApplicationName(NEW_APPLICATION_NAME);
@@ -63,8 +59,7 @@ public class TestAddApplication extends AbstractWebDriverBase{
 		reporterLog("8. Select private visibility");
 		wizardOne.selectPrivateVisibility();		
 		reporterLog("9. Click Continue to Step 2");
-		NewApplicationWizardTwo wizardTwo = wizardOne.clickContinueButton();
-		
+		NewApplicationWizardTwo wizardTwo = wizardOne.clickContinueButton();		
 		reporterLog("10. Choose enable SAML through PingOne ");
 		wizardTwo.chooseSAMLEnabled();
 		reporterLog("10. Enter domain name: " + DOMAIN_NAME);
@@ -72,14 +67,11 @@ public class TestAddApplication extends AbstractWebDriverBase{
 		reporterLog("11. Enter application url: " + APPLICATION_URL);
 		wizardTwo.enterApplicationUrl(APPLICATION_URL);
 		reporterLog("12. Click Continue to Step 3");
-		NewApplicationWizardThree wizardThree = wizardTwo.clickContinueButton();
-		
+		NewApplicationWizardThree wizardThree = wizardTwo.clickContinueButton();		
 		reporterLog("13. Click Continue to Step 5");
-		NewApplicationWizardFive wizardFive = wizardThree.clickContinueButton();
-		
+		NewApplicationWizardFive wizardFive = wizardThree.clickContinueButton();		
 		reporterLog("14. Save application");
-		wizardFive.clickSaveButton();
-		
+		wizardFive.clickSaveButton();		
 		reporterLog("Verify new application, " + NEW_APPLICATION_NAME + ", is created");
 		myApplicationsPage.verifyNewApplicationExisted(NEW_APPLICATION_NAME);
 		reporterLog("Delete application, " + NEW_APPLICATION_NAME);
