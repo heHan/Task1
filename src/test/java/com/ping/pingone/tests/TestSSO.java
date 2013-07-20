@@ -101,7 +101,7 @@ public class TestSSO extends AbstractWebDriverBase{
 	}
 
 	private void retrieveUserTokenAndVerify(String tokenId) {
-		reporterLog(tokenId);
+		reporterLog("User tokenId is " + tokenId);
 		DefaultHttpClient client = new DefaultHttpClient();
 		/*
 		 * The following url is used to retrieve the token from PingOne
@@ -130,10 +130,8 @@ public class TestSSO extends AbstractWebDriverBase{
 			if(responseEntity!=null) {
 				String responseString = EntityUtils.toString(responseEntity);				
 				JSONObject result = new JSONObject(responseString);
-				JSONArray tokenList = result.getJSONArray("names");
-				JSONObject oj = tokenList.getJSONObject(0);
 				String verificationResultMessage = null;
-				if (oj.getString(TOKEN_LAST_NAME_KEY)!= TOKEN_LAST_NAME_EXPECTED_VALUE){
+				if (result.getString(TOKEN_LAST_NAME_KEY)!= TOKEN_LAST_NAME_EXPECTED_VALUE){
 					verificationResultMessage = TOKEN_LAST_NAME_KEY;
 				} 
 				Reporter.log(responseString, true);
