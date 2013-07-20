@@ -84,6 +84,11 @@ public class TestAddApplication extends AbstractWebDriverBase{
 		NewApplicationWizardFive wizardFive = new NewApplicationWizardFive(webDriver);	
 		wizardFive.clickSaveButton();
 		
+		reporterLog("Verify new application, " + NEW_APPLICATION_NAME + ", is created");
+		myApplicationsPage.verifyNewApplicationExisted(NEW_APPLICATION_NAME);
+		reporterLog("Delete application, " + NEW_APPLICATION_NAME);
+		myApplicationsPage.clickFirstDeleteButton();
+		myApplicationsPage.verifyDeleted();
 		throw new AssertionError("fail for now");
 	}
 }

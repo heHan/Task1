@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 /**
  * New application wizard # two page object
  * @author HenryH
@@ -25,17 +23,17 @@ public class NewApplicationWizardTwo extends MyApplicationsPage {
 	protected List<By> verificationPoints() {
 		List<By> verificationPoints = new ArrayList<By>();
 		verificationPoints.add(ENABLE_THROUGH_PINGON);
-		verificationPoints.add(DOMAIN_NAME);
-		verificationPoints.add(APPLICATION_URL);
 		verificationPoints.add(CONTINUE_NEXT_BUTTON);
 		return verificationPoints;
 	}
 	
 	public void chooseSAMLEnabled(){
-		WebElement button = findWebElement(ENABLE_THROUGH_PINGON);
-		if (webDriver instanceof JavascriptExecutor) {
-	        ((JavascriptExecutor)webDriver).executeScript("arguments[0].onclick()", button);
-	    }
+		findWebElementAndClick(ENABLE_THROUGH_PINGON);
+		// javascript will also work here
+//		WebElement button = findWebElement(ENABLE_THROUGH_PINGON);
+//		if (webDriver instanceof JavascriptExecutor) {
+//	        ((JavascriptExecutor)webDriver).executeScript("arguments[0].onclick()", button);
+//	    }
 	}
 	
 	/**
