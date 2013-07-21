@@ -18,7 +18,7 @@ public class IdpApplicationLogin  extends AbstractBasePage{
 		return verificationPoints;
 	}
 	
-	public void clickLoginButton(){
+	public void clickLoginButtonAndWaitForRedirect(){
 		findWebElementAndClick(LOGIN_BUTTON);
 		// wait for the redirect to finish -- it's not a realSite
 		try {
