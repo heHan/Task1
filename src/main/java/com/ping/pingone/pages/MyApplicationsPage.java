@@ -18,7 +18,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 public class MyApplicationsPage extends AbstractBasePage {
 	static final By ADD_NEW_APPLICATION_BUTTON = By.xpath("//a[@class='btn btn-primary']");	
 	static final By CONTINUE_NEXT_BUTTON = By.xpath("//input[@class='nextButton btn btn-primary']");
-	static final By THE_FIREST_DELETE_BUTTON = By.xpath("//a[@class='btn std-btn last']");
 	static final By FEEDBACK_PANEL = By.xpath("//span[@class='feedbackPanelINFO']");
 	static final By DELETE_CONFIRM_BUTTON = By.id("confirmationDialogAction");
 	static final By START_SSO = By.xpath("//a[text()= 'Start Single Sign-On']");
@@ -51,8 +50,10 @@ public class MyApplicationsPage extends AbstractBasePage {
 		findWebElement(newApplicationName);
 	}
 	
-	public void clickFirstDeleteButton() {
-		findWebElementAndClick(THE_FIREST_DELETE_BUTTON);
+	public void clickDeleteButtonByApplicationName(String applicationName) {
+		String xpathString = "//span[text()='" + applicationName + "']/../../..//a[@class='btn std-btn last']";
+		By deleteButton = By.xpath(xpathString);
+		findWebElementAndClick(deleteButton);
 		findWebElementAndClick(DELETE_CONFIRM_BUTTON);
 	}
 

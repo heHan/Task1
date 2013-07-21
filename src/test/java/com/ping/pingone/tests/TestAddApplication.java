@@ -75,7 +75,7 @@ public class TestAddApplication extends AbstractWebDriverBase{
 		reporterLog("Verify new application, " + NEW_APPLICATION_NAME + ", is created");
 		myApplicationsPage.verifyNewApplicationExisted(NEW_APPLICATION_NAME);
 		reporterLog("Delete application, " + NEW_APPLICATION_NAME);
-		myApplicationsPage.clickFirstDeleteButton();
+		myApplicationsPage.clickDeleteButtonByApplicationName(NEW_APPLICATION_NAME);
 		myApplicationsPage.verifyDeleted();
 	}
 }

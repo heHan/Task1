@@ -22,7 +22,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * @author hehan
  *
  */
-
 public abstract class AbstractBasePage{
 
 	/**

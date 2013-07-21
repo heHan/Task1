@@ -62,7 +62,6 @@ public abstract class AbstractWebDriverBase {
 			case SAFARI: webDriver = new SafariDriver(testBrowser.getCapability());
 			case IE: webDriver = new InternetExplorerDriver(testBrowser.getCapability());
 			default: webDriver = new FirefoxDriver(testBrowser.getCapability());
-			log.info(testBrowser.getCapability());
 		}
 		if (webDriver != null) {
 			webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
